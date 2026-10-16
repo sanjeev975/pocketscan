@@ -1,0 +1,22 @@
+{
+  "id": "./",
+  "name": "PocketScan - Offline Document Scanner",
+  "short_name": "PocketScan",
+  "description": "Scan, crop, enhance, OCR and export documents as PDF, TXT, CSV or images. Works fully offline.",
+  "start_url": "./index.html?source=pwa",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#0f1115",
+  "theme_color": "#0f1115",
+  "categories": ["productivity", "utilities", "business"],
+  "icons": [
+    { "src": "icons/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "icons/maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ],
+  "shortcuts": [
+    { "name": "Scan a document", "short_name": "Scan", "url": "./index.html?action=scan", "icons": [{ "src": "icons/icon-192.png", "sizes": "192x192" }] },
+    { "name": "Import images", "short_name": "Import", "url": "./index.html?action=import", "icons": [{ "src": "icons/icon-192.png", "sizes": "192x192" }] }
+  ]
+}

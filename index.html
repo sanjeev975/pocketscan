@@ -1,0 +1,233 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>PocketScan - Offline Document Scanner</title>
+  <meta name="description" content="Scan, crop, enhance, OCR and export documents as PDF, TXT, CSV or images. Works fully offline.">
+  <meta name="theme-color" content="#0f1115">
+  <link rel="manifest" href="manifest.json">
+  <link rel="icon" type="image/png" href="icons/icon-192.png">
+  <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="PocketScan">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- SVG icon sprite -->
+<svg xmlns="http://www.w3.org/2000/svg" style="display:none" aria-hidden="true">
+  <symbol id="i-camera" viewBox="0 0 24 24"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></symbol>
+  <symbol id="i-flip" viewBox="0 0 24 24"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></symbol>
+  <symbol id="i-flash" viewBox="0 0 24 24"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></symbol>
+  <symbol id="i-image" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></symbol>
+  <symbol id="i-check" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></symbol>
+  <symbol id="i-x" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></symbol>
+  <symbol id="i-rot-l" viewBox="0 0 24 24"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/></symbol>
+  <symbol id="i-rot-r" viewBox="0 0 24 24"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></symbol>
+  <symbol id="i-trash" viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6m5 0V4a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v2"/></symbol>
+  <symbol id="i-crop" viewBox="0 0 24 24"><path d="M6.13 1L6 16a2 2 0 0 0 2 2h15"/><path d="M1 6.13L16 6a2 2 0 0 1 2 2v15"/></symbol>
+  <symbol id="i-left" viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></symbol>
+  <symbol id="i-right" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></symbol>
+  <symbol id="i-plus" viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></symbol>
+  <symbol id="i-download" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></symbol>
+  <symbol id="i-text" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></symbol>
+  <symbol id="i-grid" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></symbol>
+  <symbol id="i-full" viewBox="0 0 24 24"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/></symbol>
+  <symbol id="i-magic" viewBox="0 0 24 24"><path d="M12 3l1.9 5.1L19 10l-5.1 1.9L12 17l-1.9-5.1L5 10l5.1-1.9z"/><path d="M19 15l.8 2.2L22 18l-2.2.8L19 21l-.8-2.2L16 18l2.2-.8z"/></symbol>
+  <symbol id="i-copy" viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></symbol>
+  <symbol id="i-dots" viewBox="0 0 24 24"><circle cx="12" cy="5" r="1"/><circle cx="12" cy="12" r="1"/><circle cx="12" cy="19" r="1"/></symbol>
+  <symbol id="i-all" viewBox="0 0 24 24"><polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><polyline points="7 23 3 19 7 15"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/></symbol>
+</svg>
+
+<div id="app">
+
+  <!-- ======================= LIBRARY ======================= -->
+  <section id="view-library" class="view active" aria-label="Your documents">
+    <header class="bar">
+      <div class="brand"><img src="icons/icon-192.png" alt="" class="logo"><h1>PocketScan</h1></div>
+      <div class="bar-right">
+        <span id="net-pill" class="pill" title="Network status">Online</span>
+        <button id="btn-install" class="btn small" hidden>Install</button>
+      </div>
+    </header>
+    <main class="lib-main">
+      <div id="lib-empty" class="empty" hidden>
+        <svg class="big-ico"><use href="#i-text"/></svg>
+        <h2>No scans yet</h2>
+        <p>Tap <b>Scan</b> to use the camera, or import photos. Everything stays on this device - no uploads, no account.</p>
+        <p id="ios-hint" class="muted" hidden>To install on iPhone/iPad: Share &rarr; <b>Add to Home Screen</b>.</p>
+      </div>
+      <div id="doc-grid" class="doc-grid"></div>
+    </main>
+    <div class="fab-wrap">
+      <button id="fab-import" class="fab secondary" title="Import images" aria-label="Import images"><svg class="ico"><use href="#i-image"/></svg></button>
+      <button id="fab-scan" class="fab primary" aria-label="Scan with camera"><svg class="ico"><use href="#i-camera"/></svg><span>Scan</span></button>
+    </div>
+  </section>
+
+  <!-- ======================= CAMERA ======================= -->
+  <section id="view-camera" class="view dark" aria-label="Camera">
+    <div class="cam-stage" id="cam-stage">
+      <video id="cam-video" playsinline muted autoplay></video>
+      <canvas id="cam-overlay"></canvas>
+      <div id="cam-hint" class="cam-hint">Place the document on a contrasting surface</div>
+      <div id="cam-error" class="cam-error" hidden>
+        <svg class="big-ico"><use href="#i-camera"/></svg>
+        <h2 id="cam-error-title">Camera unavailable</h2>
+        <p id="cam-error-msg"></p>
+        <div class="row">
+          <button id="cam-retry" class="btn">Try again</button>
+          <button id="cam-upload" class="btn primary">Upload images</button>
+        </div>
+      </div>
+    </div>
+    <div class="cam-top">
+      <button id="cam-close" class="icon-btn glass" aria-label="Close camera"><svg class="ico"><use href="#i-x"/></svg></button>
+      <div class="cam-top-right">
+        <button id="cam-auto" class="chip glass active" aria-pressed="true" title="Live edge detection">Auto</button>
+        <button id="cam-torch" class="icon-btn glass" aria-label="Flashlight" aria-pressed="false" hidden><svg class="ico"><use href="#i-flash"/></svg></button>
+        <button id="cam-flip" class="icon-btn glass" aria-label="Switch camera"><svg class="ico"><use href="#i-flip"/></svg></button>
+      </div>
+    </div>
+    <div class="cam-bottom">
+      <button id="cam-gallery" class="icon-btn glass lg" aria-label="Import images"><svg class="ico"><use href="#i-image"/></svg></button>
+      <button id="cam-shutter" class="shutter" aria-label="Capture"><span></span></button>
+      <button id="cam-done" class="done-btn" aria-label="Done"><b id="cam-count">0</b><svg class="ico"><use href="#i-check"/></svg></button>
+    </div>
+  </section>
+
+  <!-- ======================= CROP / PERSPECTIVE ======================= -->
+  <section id="view-crop" class="view dark" aria-label="Adjust corners">
+    <header class="bar dark-bar">
+      <button id="crop-cancel" class="btn ghost">Cancel</button>
+      <h2 class="bar-title" id="crop-title">Adjust corners</h2>
+      <button id="crop-apply" class="btn primary"><svg class="ico"><use href="#i-check"/></svg>Apply</button>
+    </header>
+    <div class="crop-stage" id="crop-stage">
+      <canvas id="crop-canvas"></canvas>
+      <canvas id="crop-loupe" width="120" height="120" hidden></canvas>
+    </div>
+    <div class="crop-tools">
+      <button id="crop-auto" class="tool"><svg class="ico"><use href="#i-magic"/></svg><span>Auto detect</span></button>
+      <button id="crop-full" class="tool"><svg class="ico"><use href="#i-full"/></svg><span>Full image</span></button>
+      <p class="crop-tip">Drag the corners to match the document edges</p>
+    </div>
+  </section>
+
+  <!-- ======================= EDITOR ======================= -->
+  <section id="view-editor" class="view" aria-label="Document">
+    <header class="bar">
+      <button id="ed-back" class="icon-btn" aria-label="Back to library"><svg class="ico"><use href="#i-left"/></svg></button>
+      <input id="ed-name" class="name-input" maxlength="80" aria-label="Document name" autocomplete="off">
+      <button id="ed-export" class="btn primary"><svg class="ico"><use href="#i-download"/></svg>Export</button>
+    </header>
+    <main class="ed-main">
+      <div class="preview-wrap" id="preview-wrap">
+        <canvas id="ed-preview"></canvas>
+        <div id="ed-spin" class="spin" hidden></div>
+        <div id="ed-empty" class="empty" hidden>
+          <h2>No pages</h2><p>Add a page with the camera or import images.</p>
+        </div>
+        <div id="ed-counter" class="counter"></div>
+        <button id="ed-prev" class="nav-arrow left" aria-label="Previous page"><svg class="ico"><use href="#i-left"/></svg></button>
+        <button id="ed-next" class="nav-arrow right" aria-label="Next page"><svg class="ico"><use href="#i-right"/></svg></button>
+      </div>
+    </main>
+    <div class="filters" id="ed-filters" role="radiogroup" aria-label="Filter">
+      <button data-f="original" role="radio">Original</button>
+      <button data-f="bw" role="radio">B&amp;W</button>
+      <button data-f="magic" role="radio">Magic</button>
+      <button data-f="gray" role="radio">Grayscale</button>
+    </div>
+    <div class="page-tools">
+      <button id="pt-rotl" class="tool" aria-label="Rotate left"><svg class="ico"><use href="#i-rot-l"/></svg><span>Left</span></button>
+      <button id="pt-rotr" class="tool" aria-label="Rotate right"><svg class="ico"><use href="#i-rot-r"/></svg><span>Right</span></button>
+      <button id="pt-crop" class="tool" aria-label="Edit corners"><svg class="ico"><use href="#i-crop"/></svg><span>Crop</span></button>
+      <button id="pt-moveleft" class="tool" aria-label="Move page earlier"><svg class="ico"><use href="#i-left"/></svg><span>Move</span></button>
+      <button id="pt-moveright" class="tool" aria-label="Move page later"><svg class="ico"><use href="#i-right"/></svg><span>Move</span></button>
+      <button id="pt-all" class="tool" aria-label="Apply filter to all pages"><svg class="ico"><use href="#i-all"/></svg><span>All</span></button>
+      <button id="pt-delete" class="tool danger" aria-label="Delete page"><svg class="ico"><use href="#i-trash"/></svg><span>Delete</span></button>
+    </div>
+    <div class="strip-bar">
+      <span id="strip-label">Pages</span>
+      <button id="strip-toggle" class="btn small ghost"><svg class="ico"><use href="#i-grid"/></svg>Grid</button>
+    </div>
+    <div id="ed-strip" class="strip" aria-label="Pages"></div>
+  </section>
+
+  <!-- ======================= EXPORT MODAL ======================= -->
+  <div id="modal-export" class="modal" hidden role="dialog" aria-modal="true" aria-labelledby="exp-title">
+    <div class="sheet">
+      <div class="sheet-head">
+        <h2 id="exp-title">Export</h2>
+        <button id="exp-close" class="icon-btn" aria-label="Close"><svg class="ico"><use href="#i-x"/></svg></button>
+      </div>
+      <div class="tabs" role="tablist">
+        <button class="tab active" data-tab="pdf" role="tab">PDF</button>
+        <button class="tab" data-tab="text" role="tab">Text &amp; CSV</button>
+        <button class="tab" data-tab="img" role="tab">Images</button>
+      </div>
+
+      <div class="tabpane active" data-pane="pdf">
+        <div class="grid2">
+          <label>Page size
+            <select id="pdf-size"><option value="a4">A4</option><option value="letter">US Letter</option><option value="fit">Fit to image</option></select>
+          </label>
+          <label>Quality
+            <select id="pdf-quality"><option value="small">Small file</option><option value="std" selected>Standard</option><option value="high">High</option></select>
+          </label>
+        </div>
+        <label class="check"><input type="checkbox" id="pdf-searchable"> Make searchable (runs OCR, adds an invisible text layer)</label>
+        <button id="btn-pdf" class="btn primary block"><svg class="ico"><use href="#i-download"/></svg>Download PDF</button>
+        <p class="muted small-text">Exports all <b class="page-count">0</b> pages.</p>
+      </div>
+
+      <div class="tabpane" data-pane="text">
+        <div class="grid2">
+          <label>OCR language
+            <select id="ocr-lang">
+              <option value="eng">English</option><option value="hin">Hindi</option><option value="spa">Spanish</option>
+              <option value="fra">French</option><option value="deu">German</option><option value="por">Portuguese</option>
+              <option value="ita">Italian</option><option value="ara">Arabic</option><option value="chi_sim">Chinese (Simpl.)</option>
+              <option value="jpn">Japanese</option><option value="rus">Russian</option>
+            </select>
+          </label>
+          <label>&nbsp;<button id="btn-ocr" class="btn block"><svg class="ico"><use href="#i-magic"/></svg>Recognize text</button></label>
+        </div>
+        <div id="ocr-progress" class="progress" hidden><div class="bar-fill" id="ocr-bar"></div><span id="ocr-status"></span></div>
+        <textarea id="ocr-text" rows="9" spellcheck="false" placeholder="Recognized text appears here. You can edit it before exporting."></textarea>
+        <div class="row wrap">
+          <button id="btn-txt" class="btn"><svg class="ico"><use href="#i-text"/></svg>.txt</button>
+          <button id="btn-csv" class="btn"><svg class="ico"><use href="#i-grid"/></svg>.csv</button>
+          <button id="btn-copy" class="btn"><svg class="ico"><use href="#i-copy"/></svg>Copy</button>
+        </div>
+        <p class="muted small-text">CSV splits each line into columns using word gaps, tabs, pipes and trailing prices (good for receipts and tables).
+          <button id="btn-warm" class="link">Download OCR engine for offline use</button></p>
+      </div>
+
+      <div class="tabpane" data-pane="img">
+        <div class="grid2">
+          <label>Format
+            <select id="img-format"><option value="png">PNG (lossless)</option><option value="jpg">JPG (smaller)</option></select>
+          </label>
+          <label>Scope
+            <select id="img-scope"><option value="current">Current page</option><option value="all">All pages (ZIP)</option></select>
+          </label>
+        </div>
+        <button id="btn-img" class="btn primary block"><svg class="ico"><use href="#i-download"/></svg>Download images</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="busy" class="busy" hidden><div class="busy-card"><div class="spinner"></div><p id="busy-msg">Working...</p></div></div>
+  <div id="toast" class="toast" role="status" aria-live="polite" hidden></div>
+  <input id="file-input" type="file" accept="image/*,.heic,.heif" multiple hidden>
+</div>
+
+<noscript><p style="padding:2rem;font-family:sans-serif">PocketScan needs JavaScript.</p></noscript>
+<script src="app.js"></script>
+</body>
+</html>

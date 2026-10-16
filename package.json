@@ -1,0 +1,19 @@
+{
+  "name": "pocketscan",
+  "version": "1.0.0",
+  "description": "Offline-first PWA document scanner: camera, perspective crop, filters, OCR, PDF/TXT/CSV export.",
+  "private": true,
+  "scripts": {
+    "vendor": "node scripts/vendor.mjs",
+    "start": "npx --yes serve -l 8080 .",
+    "start:py": "python3 -m http.server 8080"
+  },
+  "dependencies": {
+    "@tesseract.js-data/eng": "1.0.0",
+    "heic2any": "0.0.4",
+    "jspdf": "2.5.1",
+    "jszip": "3.10.1",
+    "tesseract.js": "5.1.1",
+    "tesseract.js-core": "5.1.0"
+  }
+}
